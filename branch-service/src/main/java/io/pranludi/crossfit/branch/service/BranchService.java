@@ -26,23 +26,17 @@ public class BranchService {
     @Transactional
     public Function<EnvironmentData, BranchEntity> save(BranchEntity branchEntity) {
         return (EnvironmentData env) -> {
-            BranchDTO branchDTO = new BranchDTO(
-                env.id(),
-                branchEntity.password(),
-                branchEntity.name(),
-                branchEntity.email(),
-                branchEntity.phoneNumber()
-            );
-            branchRepository.save(branchDTO);
-            return branchEntity;
+            BranchDTO branchDTO = branchMapper.toDto(branchEntity);
+            var saved = branchRepository.save(branchDTO);
+            return branchMapper.toEntity(saved);
         };
     }
 
     // 지점 조회
-    public Function<EnvironmentData, BranchEntity> findById(String branchId) {
+    public Function<EnvironmentData, BranchEntity> findById() {
         return (EnvironmentData env) -> {
-            BranchDTO branchDTO = branchRepository.findById(branchId)
-                .orElseThrow(() -> ServerError.BRANCH_NOT_FOUND(branchId));
+            BranchDTO branchDTO = branchRepository.findById(env.id())
+                .orElseThrow(() -> ServerError.BRANCH_NOT_FOUND(env.id()));
             return branchMapper.toEntity(branchDTO);
         };
     }
@@ -53,5 +47,16 @@ public class BranchService {
             List<BranchDTO> branchDTOs = branchRepository.findAll();
             return branchMapper.toEntity(branchDTOs);
         };
+    }
+
+    // 지점 회원 추가
+    @Transactional
+    public void updateMemberCount(String branchId) {
+        // todo 동시성 오류 발생 가능이 있음
+        //   redisson 을 사용한 분산 락이 필요함
+        BranchDTO branchDTO = branchRepository.findById(branchId)
+            .orElseThrow(() -> ServerError.BRANCH_NOT_FOUND(branchId));
+        branchDTO.setMemberCount(branchDTO.getMemberCount() + 1);
+        branchRepository.save(branchDTO);
     }
 }

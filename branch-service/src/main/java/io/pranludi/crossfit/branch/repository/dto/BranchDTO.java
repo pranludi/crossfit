@@ -15,16 +15,9 @@ public class BranchDTO {
     private String name;
     private String email;
     private String phoneNumber;
+    private int memberCount;
 
     public BranchDTO() {
-    }
-
-    public BranchDTO(String id, String password, String name, String email, String phoneNumber) {
-        this.id = id;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
     }
 
     public String getId() {
@@ -67,6 +60,14 @@ public class BranchDTO {
         this.phoneNumber = phoneNumber;
     }
 
+    public int getMemberCount() {
+        return memberCount;
+    }
+
+    public void setMemberCount(int memberCount) {
+        this.memberCount = memberCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof BranchDTO branchDTO)) {
@@ -88,6 +89,7 @@ public class BranchDTO {
             ", name='" + name + '\'' +
             ", email='" + email + '\'' +
             ", phoneNumber='" + phoneNumber + '\'' +
+            ", memberCount='" + memberCount + '\'' +
             '}';
     }
 }

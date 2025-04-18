@@ -1,6 +1,6 @@
 package io.pranludi.crossfit.branch;
 
-import io.pranludi.crossfit.branch.domain.server.ServerProperties;
+import io.pranludi.crossfit.branch.config.security.server.ServerProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

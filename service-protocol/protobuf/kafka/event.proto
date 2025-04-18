@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package io.pranludi.crossfit.protobuf.kafka;
+
+option java_package = "io.pranludi.crossfit.protobuf.kafka";
+option java_multiple_files = true;
+
+message MemberKafka {
+  string id = 1;
+  string branch_id = 2;
+}

@@ -5,7 +5,8 @@ public record BranchEntity(
     String password,
     String name,
     String email,
-    String phoneNumber
+    String phoneNumber,
+    int memberCount
 ) {
 
 }

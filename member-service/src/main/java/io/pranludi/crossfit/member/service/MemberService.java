@@ -10,6 +10,7 @@ import io.pranludi.crossfit.member.repository.MemberRepository;
 import io.pranludi.crossfit.member.repository.dto.MemberDTO;
 import io.pranludi.crossfit.member.service.mapper.MemberMapper;
 import java.util.function.Function;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,9 +33,12 @@ public class MemberService {
     @Transactional
     public Function<EnvironmentData, MemberEntity> save(MemberEntity memberEntity) {
         return (EnvironmentData env) -> {
-            Branch branch = branchClient.findById("branch01", "branch01");
-            System.out.println("branch = " + branch);
+            ResponseEntity<Branch> branchRes = branchClient.findById(memberEntity.branchId());
+            if (branchRes.getStatusCode().isError()) {
+                throw ServerError.BRANCH_SERVICE_ERROR(memberEntity.branchId());
+            }
             MemberDTO memberDTO = memberMapper.toDto(memberEntity);
+            memberDTO.setNew(true);
             MemberDTO savedMember = memberRepository.save(memberDTO);
             MemberEntity savedMemberEntity = memberMapper.toEntity(savedMember);
             memberProducer.sendNewMember(savedMemberEntity);
@@ -43,11 +47,12 @@ public class MemberService {
     }
 
     // 회원 조회
-    public Function<EnvironmentData, MemberEntity> findById(String memberId) {
+    public Function<EnvironmentData, MemberEntity> findById() {
         return (EnvironmentData env) -> {
-            MemberDTO memberDTO = memberRepository.findById(memberId)
-                .orElseThrow(() -> ServerError.MEMBER_NOT_FOUND(memberId));
+            MemberDTO memberDTO = memberRepository.findById(env.id())
+                .orElseThrow(() -> ServerError.MEMBER_NOT_FOUND(env.id()));
             return memberMapper.toEntity(memberDTO);
         };
     }
+
 }

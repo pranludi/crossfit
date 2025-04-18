@@ -4,6 +4,7 @@ plugins {
   id("io.spring.dependency-management") version "1.1.7"
   id("org.hibernate.orm") version "6.6.11.Final"
 //  id("org.graalvm.buildtools.native") version "0.10.6"
+  id("com.google.protobuf") version "0.9.4"
 }
 
 group = "io.pranludi.crossfit"
@@ -31,7 +32,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.springframework.boot:spring-boot-starter-webflux")
+  implementation("org.springframework.boot:spring-boot-starter-security")
   // cloud
   implementation("org.springframework.cloud:spring-cloud-starter-config")
   implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
@@ -48,15 +49,19 @@ dependencies {
   // json
   implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3")
-  // lombok
-  compileOnly("org.projectlombok:lombok")
-  annotationProcessor("org.projectlombok:lombok")
   // zipkin
   implementation("io.micrometer:micrometer-tracing-bridge-brave")
   implementation("io.zipkin.reporter2:zipkin-reporter-brave")
   // db
   runtimeOnly("com.h2database:h2")
   runtimeOnly("org.postgresql:postgresql")
+  // record-builder
+  annotationProcessor("io.soabase.record-builder:record-builder-processor:44")
+  implementation("io.soabase.record-builder:record-builder-core:44")
+  compileOnly("io.soabase.record-builder:record-builder-processor:44")
+  // protobuf
+  implementation("com.google.protobuf:protobuf-java:4.30.2")
+  implementation("com.google.protobuf:protobuf-java-util:4.30.2")
   // test
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("io.projectreactor:reactor-test")
@@ -72,6 +77,26 @@ dependencyManagement {
 hibernate {
   enhancement {
     enableAssociationManagement = true
+  }
+}
+
+protobuf {
+  protoc {
+    artifact = "com.google.protobuf:protoc:4.30.2"
+  }
+  generateProtoTasks {
+    all().forEach {
+      it.plugins {
+      }
+    }
+  }
+}
+
+sourceSets {
+  main {
+    proto {
+      srcDir("../service-protocol/protobuf")
+    }
   }
 }
 

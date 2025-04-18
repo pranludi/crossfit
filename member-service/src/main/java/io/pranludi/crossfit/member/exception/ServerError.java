@@ -11,6 +11,10 @@ public class ServerError extends RuntimeException {
         return new ServerError("회원(" + memberId + ")을 찾을 수 없습니다. (40000)", 40000);
     }
 
+    public static ServerError BRANCH_SERVICE_ERROR(String branchId) {
+        return new ServerError("branch service error(" + branchId + ")", 40000);
+    }
+
     private String message;
     private int code;
     private Object[] arguments;
