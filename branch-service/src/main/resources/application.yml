@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: branch-service
+  config:
+    import: optional:configserver:http://localhost:8888
+
+application:
+  id: branch-service-1
