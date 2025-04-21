@@ -5,7 +5,7 @@ import io.pranludi.crossfit.branch.mapper.EntityMapper;
 import io.pranludi.crossfit.branch.repository.dto.BranchDTO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring")
 public interface BranchMapper extends EntityMapper<BranchDTO, BranchEntity> {
 
 }
