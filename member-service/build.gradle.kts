@@ -64,6 +64,7 @@ dependencies {
   implementation("com.google.protobuf:protobuf-java-util:4.30.2")
   // test
   testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("org.springframework.security:spring-security-test")
   testImplementation("io.projectreactor:reactor-test")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
