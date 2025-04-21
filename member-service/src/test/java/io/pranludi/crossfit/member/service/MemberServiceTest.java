@@ -15,6 +15,7 @@ import io.pranludi.crossfit.member.repository.MemberRepository;
 import io.pranludi.crossfit.member.repository.dto.MemberDTO;
 import io.pranludi.crossfit.member.service.mapper.MemberMapper;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +41,7 @@ class MemberServiceTest {
     @Test
     void save() {
         // given
-        var env = new EnvironmentData("test", LocalDateTime.now());
+        var env = new EnvironmentData("id", LocalDateTime.now());
         var memberEntity = new MemberEntity("id", "password", "branchId", "name", "email", "phoneNumber", MemberGrade.NORMAL, LocalDateTime.now());
         var branchClientData = ResponseEntity.ok(new Branch("id", "password", "name", "email", "phoneNumber"));
         var memberDTO = new MemberDTO("id", "password", "branchId", "name", "email", "phoneNumber", MemberGrade.NORMAL, LocalDateTime.now());
@@ -58,5 +59,17 @@ class MemberServiceTest {
 
     @Test
     void findById() {
+        // given
+        var env = new EnvironmentData("id", LocalDateTime.now());
+        var memberEntity = new MemberEntity("id", "password", "branchId", "name", "email", "phoneNumber", MemberGrade.NORMAL, LocalDateTime.now());
+        var memberDTO = new MemberDTO("id", "password", "branchId", "name", "email", "phoneNumber", MemberGrade.NORMAL, LocalDateTime.now());
+        given(memberRepository.findById(anyString())).willReturn(Optional.of(memberDTO));
+        given(memberMapper.toEntity(memberDTO)).willReturn(memberEntity);
+
+        // when
+        var findMember = memberService.findById().apply(env);
+
+        // then
+        assertEquals(env.id(), findMember.id());
     }
 }
