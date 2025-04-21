@@ -2,6 +2,7 @@ package io.pranludi.crossfit.member.repository.dto;
 
 import io.pranludi.crossfit.member.domain.MemberGrade;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
@@ -9,9 +10,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.domain.Persistable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "member")
 public class MemberDTO implements Persistable<String> {
 
@@ -25,6 +29,8 @@ public class MemberDTO implements Persistable<String> {
     @Enumerated(EnumType.STRING)
     private MemberGrade grade;
     private LocalDateTime lastPaidAt;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     @Transient
     private boolean isNew = false;
@@ -117,6 +123,14 @@ public class MemberDTO implements Persistable<String> {
         this.lastPaidAt = lastPaidAt;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof MemberDTO memberDTO)) {
@@ -141,6 +155,7 @@ public class MemberDTO implements Persistable<String> {
             ", phoneNumber='" + phoneNumber + '\'' +
             ", grade=" + grade +
             ", lastPaidAt=" + lastPaidAt +
+            ", createdAt=" + createdAt +
             '}';
     }
 }
