@@ -32,6 +32,17 @@ public class MemberDTO implements Persistable<String> {
     public MemberDTO() {
     }
 
+    public MemberDTO(String id, String password, String branchId, String name, String email, String phoneNumber, MemberGrade grade, LocalDateTime lastPaidAt) {
+        this.id = id;
+        this.password = password;
+        this.branchId = branchId;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.grade = grade;
+        this.lastPaidAt = lastPaidAt;
+    }
+
     @Override
     public boolean isNew() {
         return isNew;
