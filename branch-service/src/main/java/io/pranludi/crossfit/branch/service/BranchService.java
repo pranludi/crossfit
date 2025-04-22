@@ -1,5 +1,6 @@
 package io.pranludi.crossfit.branch.service;
 
+import io.pranludi.crossfit.branch.config.lock.DistributedLock;
 import io.pranludi.crossfit.branch.domain.BranchEntity;
 import io.pranludi.crossfit.branch.domain.EnvironmentData;
 import io.pranludi.crossfit.branch.exception.ServerError;
@@ -51,12 +52,12 @@ public class BranchService {
 
     // 지점 회원 추가
     @Transactional
+    @DistributedLock(key = "#branchId")
     public void updateMemberCount(String branchId) {
-        // todo 동시성 오류 발생 가능이 있음
-        //   redisson 을 사용한 분산 락이 필요함
         BranchDTO branchDTO = branchRepository.findById(branchId)
             .orElseThrow(() -> ServerError.BRANCH_NOT_FOUND(branchId));
         branchDTO.setMemberCount(branchDTO.getMemberCount() + 1);
         branchRepository.save(branchDTO);
     }
+
 }

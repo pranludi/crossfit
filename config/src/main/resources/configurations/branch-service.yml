@@ -28,6 +28,10 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
     bootstrap-servers: localhost:10000,localhost:10001,localhost:10002
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 jwt:
   secret-key: "rYfed5F12iViHmbB7ZufrxIR6MNLG67+4+b6+DhqcRJuFVe7/KxhIb4necxKaCDN"
